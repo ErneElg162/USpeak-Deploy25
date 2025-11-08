@@ -5,10 +5,11 @@ def getAmp(audio: AudioSegment, index: int) -> int:
     return int.from_bytes(audio.get_frame(index), byteorder="little", signed=True)
 
 
-d = AudioSegment.from_wav("Phonemes/2.wav")
+#d = AudioSegment.from_wav("Phonemes/2.wav")
 a = AudioSegment.from_wav("Phonemes/25.wav")
 
-print(a.frame_count())
+li = [getAmp(a, i) for i in range(10, 100)]
+print(li)
 
 #dad = d + a * 3 + d * 3
 
