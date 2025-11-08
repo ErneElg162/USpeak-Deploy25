@@ -68,5 +68,9 @@ lowestEnd = lowestStart + len(p_arr)
 print(lowestStart)
 print(lowestEnd)
 print(lowestValue)
-finalSample = voice[lowestStart / 44.1: lowestEnd / 44.1] * 100
+
+t1 = (lowestStart / voice.frame_count()) * len(voice)
+t2 = (lowestEnd / voice.frame_count()) * len(voice)
+
+finalSample = voice[t1: t2] * 100
 finalSample.export("voice.wav")
