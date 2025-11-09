@@ -26,6 +26,8 @@ def getAvgRatio(p_list, v_list, v_start_i):
         if v_list[v_start_i + i] != 0:
             total_ratio += p_list[i]/v_list[v_start_i + i]
             n += 1
+    if n == 0:
+        return -1
 
     return total_ratio / n
 
@@ -48,7 +50,7 @@ def findMinInRange(v_list, t, target):
 
 bounds = []
 
-voice = AudioSegment.from_wav("Phonemes/gun.wav")
+voice = AudioSegment.from_wav("pie.wav")
 v_arr = getArrayFromSegment(voice)
 print(len(v_arr))
 
@@ -75,7 +77,7 @@ for p_num in range (1, 45):
     lowestEnd = lowestStart + len(p_arr)
     print(lowestStart, v_arr[lowestStart])
     print(lowestEnd, v_arr[lowestEnd])
-    lowestEnd = findMinInRange(v_arr, lowestEnd, v_arr[lowestStart])
+    # lowestEnd = findMinInRange(v_arr, lowestEnd, v_arr[lowestStart])
     print(lowestEnd, v_arr[lowestEnd])
     print(lowestValue)
 

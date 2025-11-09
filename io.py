@@ -17,7 +17,7 @@ else:
 nltk.download() # <--with whatever you need to straight up download in here (cmudict, averaged_perceptron_tagger)
 
 """""
-voice = AudioSegment.from_wav("Phonemes/gun.wav")
+voice = AudioSegment.from_wav("pie.wav")
 blank_space = AudioSegment.from_wav("Phonemes/45.wav")
 endlist = []
 
@@ -41,6 +41,7 @@ g2p = G2p()
 text = input("Enter a sentence: ")
 phonemes = g2p(text)
 print(phonemes)
+print(len(voice))
 
 
 start0 = endlist[dict[phonemes[0]] - 1][0]
