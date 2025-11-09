@@ -1,15 +1,3 @@
-import math
+dict = {"B":1, "D": 2, "F": 3, "G": 4, "HH": 5, "JH": 6, "K": 7, "L": 8, "M": 9, "N": 10, "P": 11, "R": 12, "S": 13, "T": 14, "V": 15, "W": 16, "Z": 17, "ZH": 18, "CH": 19, "SH": 20, "TH": 21, "DH": 22, "NG": 23, "Y": 24, "AE1": 25, "EY1": 26, "EH1": 27, "IY1": 28, "IH1": 29, "AY1": 30, "AA1": 31, "OW1": 32, "UH1": 33, "AH1": 34, "UW1": 35, "OY1": 36, "AW1": 37, "AH0": 38, "EH1": 39, "ER1": 41, "A01": 42, "IY1": 43}
 
-def calcError(v, phoenemArray, r, t):
-    err = 0
-    n = len(phoenemArray)
-    for i in range(n):
-        err += (r * v[i + t] - phoenemArray[i]) ** 2
-    return err
-    
 
-p_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-v_list = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
-why = calcError(v_list, p_list, 1, 0)    
-print(why)
-    
