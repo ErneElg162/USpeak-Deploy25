@@ -48,11 +48,14 @@ def findMinInRange(v_list, t, target):
 
 bounds = []
 
-voice = AudioSegment.from_wav("Phonemes/sentence.wav")
+voice = AudioSegment.from_wav("Phonemes/gun.wav")
 v_arr = getArrayFromSegment(voice)
 print(len(v_arr))
 
-for p_num in range (45):
+for p_num in range (1, 45):
+    if p_num == 39 or p_num == 40 or p_num == 43 or p_num == 44:
+        bounds.append([0,0,0])
+        continue
     phon = AudioSegment.from_wav("Phonemes/" + str(p_num) + ".wav")
     p_arr = getArrayFromSegment(phon)
     print(len(p_arr))
@@ -79,12 +82,8 @@ for p_num in range (45):
     t1 = int((lowestStart / voice.frame_count()) * len(voice))
     t2 = int((lowestEnd / voice.frame_count()) * len(voice))
 
-    bounds.append([t1, t2])
+    bounds.append([t1, t2, 1])
 
-output = voice[bounds[0][0] : bounds[0][1]]
-output += voice[bounds[1][0] : bounds[1][1]] * 3
-output += voice[bounds[2][0] : bounds[2][1]] * 2
-output.export("output.wav")
-
-output3 = voice[bounds[2][0] : bounds[2][1]]
-output3.export("output3.wav")
+with open("audio_data.txt", 'w') as file:
+    for i in range(44):
+        file.write(str(bounds[i][0]) + ", " + str(bounds[i][1]) + ", " + str(bounds[i][2]) + "\n")
