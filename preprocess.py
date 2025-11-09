@@ -1,5 +1,4 @@
 from pydub import AudioSegment
-import math
 
 
 def getAmp(audio: AudioSegment, index: int) -> int:
@@ -34,7 +33,7 @@ def getAvgRatio(p_list, v_list, v_start_i):
 
 bounds = []
 
-voice = AudioSegment.from_wav("SAMPLE_AUD.wav")
+voice = AudioSegment.from_wav(".wav")
 v_arr = getArrayFromSegment(voice)
 print(len(v_arr))
 
