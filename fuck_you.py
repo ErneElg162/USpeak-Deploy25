@@ -1,4 +1,5 @@
 from pydub import AudioSegment
+from g2p_en import G2p
 import math
 
 
@@ -47,15 +48,17 @@ def findMinInRange(v_list, t, target):
     return index
 
 phonemes = ["4", "25", "2"]
+bounds = []
 
-"""
+
+voice = AudioSegment.from_wav("Phonemes/sentence.wav")
+v_arr = getArrayFromSegment(voice)
+print(len(v_arr))
+
 for p_num in range (3):
     phon = AudioSegment.from_wav("Phonemes/" + phonemes[p_num] + ".wav")
     p_arr = getArrayFromSegment(phon)
     print(len(p_arr))
-    voice = AudioSegment.from_wav("Phonemes/sentence.wav")
-    v_arr = getArrayFromSegment(voice)
-    print(len(v_arr))
 
     temp_r = getAvgRatio(p_arr, v_arr, 0)
     lowestStart = 0
@@ -65,7 +68,7 @@ for p_num in range (3):
         r = getAvgRatio(p_arr, v_arr, t)
         err = calcError(v_arr, p_arr, r, t)
 
-        if r <= 3 and err < lowestValue:
+        if r <= 3 and r >= 0 and err < lowestValue:
             lowestValue = err
             lowestStart = t
 
@@ -76,13 +79,15 @@ for p_num in range (3):
     print(lowestEnd, v_arr[lowestEnd])
     print(lowestValue)
 
+    t1 = int((lowestStart / voice.frame_count()) * len(voice))
+    t2 = int((lowestEnd / voice.frame_count()) * len(voice))
 
-    t1 = (lowestStart / voice.frame_count()) * len(voice)
-    t2 = (lowestEnd / voice.frame_count()) * len(voice)
+    bounds.append([t1, t2])
 
-    finalSample = voice[t1: t2]
-    finalSample.export("outPhonemes/"+ phonemes[p_num] +".wav")
-"""
-
-output = AudioSegment.from_wav("outPhonemes/4.wav")# + AudioSegment.from_wav("outPhonemes/25.wav") * 2 + AudioSegment.from_wav("outPhonemes/2.wav")
+output = voice[bounds[0][0] : bounds[0][1]]
+output += voice[bounds[1][0] : bounds[1][1]] * 3
+output += voice[bounds[2][0] : bounds[2][1]] * 2
 output.export("output.wav")
+
+output3 = voice[bounds[2][0] : bounds[2][1]]
+output3.export("output3.wav")
