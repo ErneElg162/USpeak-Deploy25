@@ -46,8 +46,11 @@ def findMinInRange(v_list, t, target):
             index = t+i
     return index
 
-for p_num in range (40):
-    phon = AudioSegment.from_wav("Phonemes/" + (p_num + 1) + ".wav")
+phonemes = ["4", "25", "2"]
+
+"""
+for p_num in range (3):
+    phon = AudioSegment.from_wav("Phonemes/" + phonemes[p_num] + ".wav")
     p_arr = getArrayFromSegment(phon)
     print(len(p_arr))
     voice = AudioSegment.from_wav("Phonemes/sentence.wav")
@@ -61,7 +64,8 @@ for p_num in range (40):
     for t in range(0, len(v_arr) - len(p_arr) + 1, 5):
         r = getAvgRatio(p_arr, v_arr, t)
         err = calcError(v_arr, p_arr, r, t)
-        if err < lowestValue:
+
+        if r <= 3 and err < lowestValue:
             lowestValue = err
             lowestStart = t
 
@@ -76,5 +80,9 @@ for p_num in range (40):
     t1 = (lowestStart / voice.frame_count()) * len(voice)
     t2 = (lowestEnd / voice.frame_count()) * len(voice)
 
-    finalSample = voice[t1: t2] * 5
-    finalSample.export("outPhonemes/"+ (p_num + 1) +".wav")
+    finalSample = voice[t1: t2]
+    finalSample.export("outPhonemes/"+ phonemes[p_num] +".wav")
+"""
+
+output = AudioSegment.from_wav("outPhonemes/4.wav")# + AudioSegment.from_wav("outPhonemes/25.wav") * 2 + AudioSegment.from_wav("outPhonemes/2.wav")
+output.export("output.wav")
