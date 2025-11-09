@@ -38,7 +38,11 @@ voice = AudioSegment.from_wav("SAMPLE_AUD.wav")
 v_arr = getArrayFromSegment(voice)
 print(len(v_arr))
 
-scales = [1] * 44
+K = 1
+S = 3
+L = 5
+#                                                                                V
+scales = [K, K, S, K, S, S, K, S, S, S, K, S, S, K, S, S, S, K, K, S, S, S, K, S, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, S, L, L, L, S, S]
 
 for p_num in range (1, 45):
     print(f"WORKING ON {p_num}")
