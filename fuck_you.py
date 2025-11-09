@@ -1,5 +1,4 @@
 from pydub import AudioSegment
-from g2p_en import G2p
 import math
 
 
@@ -47,16 +46,14 @@ def findMinInRange(v_list, t, target):
             index = t+i
     return index
 
-phonemes = ["4", "25", "2"]
 bounds = []
-
 
 voice = AudioSegment.from_wav("Phonemes/sentence.wav")
 v_arr = getArrayFromSegment(voice)
 print(len(v_arr))
 
-for p_num in range (3):
-    phon = AudioSegment.from_wav("Phonemes/" + phonemes[p_num] + ".wav")
+for p_num in range (45):
+    phon = AudioSegment.from_wav("Phonemes/" + str(p_num) + ".wav")
     p_arr = getArrayFromSegment(phon)
     print(len(p_arr))
 
