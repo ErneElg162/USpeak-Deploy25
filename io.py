@@ -17,7 +17,7 @@ else:
 nltk.download() # <--with whatever you need to straight up download in here (cmudict, averaged_perceptron_tagger)
 
 """""
-voice = AudioSegment.from_wav("pie.wav")
+voice = AudioSegment.from_wav("SAMPLE_AUD.wav")
 blank_space = AudioSegment.from_wav("Phonemes/45.wav")
 endlist = []
 
