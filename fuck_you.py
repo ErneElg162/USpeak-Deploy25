@@ -29,48 +29,52 @@ def getAvgRatio(p_list, v_list, v_start_i):
 
     return total_ratio / n
 
-def findMinInRange(v_list, t):
-    val = v_list[t]**2
+def findMinInRange(v_list, t, target):
+    slope = v_list[t] - v_list[t-1]
+    val = (target-v_list[t])**2
     index = t
-    for i in range(200):
-        val1 = v_list[t-i]**2
-        val2 = v_list[t+i]**2
-        if val1<val:
+    for i in range(250):
+        if (t-i<0 or t+i>=len(v_list)):
+            break
+        val1 = 2*(target-v_list[t-i])**2 + (v_list[t-i] - v_list[t-i-1])**2
+        val2 = 2*(target-v_list[t+i])**2 + (v_list[t+i] - v_list[t+i-1])**2
+        if val1<val and math.copysign(1, v_list[t-i] - v_list[t-i-1]) == math.copysign(1, slope):
             val = val1
             index = t-i
-        if val2 < val:
+        if val2 < val and math.copysign(1, v_list[t+i] - v_list[t+i-1]) == math.copysign(1, slope):
             val = val2
             index = t+i
     return index
 
-h = 1 #not used yet, this is the amount the samples will be stretched horizontally using fft
-h = 2
+for p_num in range (40):
+    phon = AudioSegment.from_wav("Phonemes/" + (p_num + 1) + ".wav")
+    p_arr = getArrayFromSegment(phon)
+    print(len(p_arr))
+    voice = AudioSegment.from_wav("Phonemes/sentence.wav")
+    v_arr = getArrayFromSegment(voice)
+    print(len(v_arr))
 
-phon = AudioSegment.from_wav("Phonemes/25.wav")
-p_arr = getArrayFromSegment(phon)
-print(len(p_arr))
-voice = AudioSegment.from_wav("Phonemes/sentence.wav")
-v_arr = getArrayFromSegment(voice)
-print(len(v_arr))
+    temp_r = getAvgRatio(p_arr, v_arr, 0)
+    lowestStart = 0
+    lowestValue = calcError(v_arr, p_arr, temp_r, 0)
 
-temp_r = getAvgRatio(p_arr, v_arr, 0)
-lowestStart = 0
-lowestValue = calcError(v_arr, p_arr, temp_r, 0)
+    for t in range(0, len(v_arr) - len(p_arr) + 1, 5):
+        r = getAvgRatio(p_arr, v_arr, t)
+        err = calcError(v_arr, p_arr, r, t)
+        if err < lowestValue:
+            lowestValue = err
+            lowestStart = t
 
-for t in range(0, len(v_arr) - len(p_arr) + 1, 10):
-    r = getAvgRatio(p_arr, v_arr, t)
-    err = calcError(v_arr, p_arr, r, t)
-    if err < lowestValue:
-        lowestValue = err
-        lowestStart = t
+    lowestEnd = lowestStart + len(p_arr)
+    print(lowestStart, v_arr[lowestStart])
+    print(lowestEnd, v_arr[lowestEnd])
+    lowestEnd = findMinInRange(v_arr, lowestEnd, v_arr[lowestStart])
+    print(lowestEnd, v_arr[lowestEnd])
+    print(lowestValue)
 
-lowestEnd = lowestStart + len(p_arr)
-print(lowestStart)
-print(lowestEnd)
-print(lowestValue)
 
-t1 = (lowestStart / voice.frame_count()) * len(voice)
-t2 = (lowestEnd / voice.frame_count()) * len(voice)
+    t1 = (lowestStart / voice.frame_count()) * len(voice)
+    t2 = (lowestEnd / voice.frame_count()) * len(voice)
 
-finalSample = voice[t1: t2] * 100
-finalSample.export("voice.wav")
+    finalSample = voice[t1: t2] * 5
+    finalSample.export("outPhonemes/"+ (p_num + 1) +".wav")
