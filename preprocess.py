@@ -1,5 +1,4 @@
 from pydub import AudioSegment
-import math
 
 
 def getAmp(audio: AudioSegment, index: int) -> int:
@@ -31,30 +30,21 @@ def getAvgRatio(p_list, v_list, v_start_i):
 
     return total_ratio / n
 
-def findMinInRange(v_list, t, target):
-    slope = v_list[t] - v_list[t-1]
-    val = (target-v_list[t])**2
-    index = t
-    for i in range(250):
-        if (t-i<0 or t+i>=len(v_list)):
-            break
-        val1 = 2*(target-v_list[t-i])**2 + (v_list[t-i] - v_list[t-i-1])**2
-        val2 = 2*(target-v_list[t+i])**2 + (v_list[t+i] - v_list[t+i-1])**2
-        if val1<val and math.copysign(1, v_list[t-i] - v_list[t-i-1]) == math.copysign(1, slope):
-            val = val1
-            index = t-i
-        if val2 < val and math.copysign(1, v_list[t+i] - v_list[t+i-1]) == math.copysign(1, slope):
-            val = val2
-            index = t+i
-    return index
 
 bounds = []
 
-voice = AudioSegment.from_wav("pie.wav")
+voice = AudioSegment.from_wav(".wav")
 v_arr = getArrayFromSegment(voice)
 print(len(v_arr))
 
+K = 1
+S = 3
+L = 5
+#                                                                                V
+scales = [K, K, S, K, S, S, K, S, S, S, K, S, S, K, S, S, S, K, K, S, S, S, K, S, L, L, L, L, L, L, L, L, L, L, L, L, L, L, L, S, L, L, L, S, S]
+
 for p_num in range (1, 45):
+    print(f"WORKING ON {p_num}")
     if p_num == 39 or p_num == 40 or p_num == 43 or p_num == 44:
         bounds.append([0,0,0])
         continue
@@ -77,14 +67,13 @@ for p_num in range (1, 45):
     lowestEnd = lowestStart + len(p_arr)
     print(lowestStart, v_arr[lowestStart])
     print(lowestEnd, v_arr[lowestEnd])
-    # lowestEnd = findMinInRange(v_arr, lowestEnd, v_arr[lowestStart])
     print(lowestEnd, v_arr[lowestEnd])
     print(lowestValue)
 
     t1 = int((lowestStart / voice.frame_count()) * len(voice))
     t2 = int((lowestEnd / voice.frame_count()) * len(voice))
 
-    bounds.append([t1, t2, 1])
+    bounds.append([t1, t2, scales[p_num - 1]])
 
 with open("audio_data.txt", 'w') as file:
     for i in range(44):
